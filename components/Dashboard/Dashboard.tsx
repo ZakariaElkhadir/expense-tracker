@@ -35,6 +35,7 @@ function Dashboard() {
           </div>
           <div className="bg-white rounded-lg overflow-hidden">
             <ul className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-36 rounded-md p-4 bg-gray-50 border-b border-gray-200">
+            <li className="font-semibold text-gray-700 flex-1">Title</li>
               <li className="font-semibold text-gray-700 flex-1">Date</li>
               <li className="font-semibold text-gray-700 flex-1">Amount</li>
               <li className="font-semibold text-gray-700 flex-1">
@@ -43,6 +44,7 @@ function Dashboard() {
               <li className="font-semibold text-gray-700 flex-1">Category</li>
             </ul>
             <ul className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-36 rounded-md p-4 bg-white border-b border-gray-200">
+            <li className="flex-1">food</li>
               <li className="flex-1">2021-09-01</li>
               <li className="flex-1">$100</li>
               <li className="flex-1">Lunch</li>
