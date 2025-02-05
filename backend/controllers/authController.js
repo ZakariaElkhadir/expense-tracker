@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 // Register function
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
 
   try {
     // Check if user already exists
@@ -16,11 +16,8 @@ exports.register = async (req, res) => {
     user = new User({
       email,
       password,
+      name
     });
-
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
 
     await user.save();
 
@@ -30,7 +27,6 @@ exports.register = async (req, res) => {
         id: user.id,
       },
     };
-
     jwt.sign(payload, "your_jwt_secret", { expiresIn: 3600 }, (err, token) => {
       if (err) throw err;
       res.json({ token });
