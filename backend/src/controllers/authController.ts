@@ -1,16 +1,18 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import { Request, Response } from "express";
+import User from "../models/User";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // Register function
-exports.register = async (req, res) => {
+export const register = async (req: Request, res: Response): Promise<void> => {
   const { email, password, name } = req.body;
 
   try {
     // Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: "User already exists" });
+      res.status(400).json({ msg: "User already exists" });
+      return;
     }
 
     user = new User({
@@ -32,12 +34,16 @@ exports.register = async (req, res) => {
       res.json({ token });
     });
   } catch (err) {
-    console.error(err.message);
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
     res.status(500).send("Server error");
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   try {
@@ -45,13 +51,15 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       console.log("User not found");
-      return res.status(400).json({ msg: "Invalid credentials" });
+      res.status(400).json({ msg: "Invalid credentials" });
+      return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       console.log("Password does not match");
-      return res.status(400).json({ msg: "Invalid credentials" });
+      res.status(400).json({ msg: "Invalid credentials" });
+      return;
     }
 
     // Generate JWT
@@ -66,7 +74,10 @@ exports.login = async (req, res) => {
       res.json({ token });
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
   }
 };
